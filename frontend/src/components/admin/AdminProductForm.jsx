@@ -23,6 +23,7 @@ const DEFAULT_TECH_SPECS = {
     grindAdjustment: "", 
     grindingSpeed: "", 
     programmableDose: false, // Checkbox
+
     // Accessories
     diameter: '',
     distributionSideMaximumDepth: '',
@@ -204,7 +205,7 @@ const handleAddVariant = () => {
         // Reset input file
         e.target.value = "";
       } catch (err) {
-        alert("Lỗi khi upload ảnh cho màu này!");
+        alert("Upload fail!");
       } finally {
         setLoading(false);
       }
@@ -449,37 +450,37 @@ const handleAddVariant = () => {
             {/* Xuất xứ */}
             <div className={form.form1}>
                 <label>Origin:</label>
-                <input name="origin" value={product.techSpecs?.origin || ""} onChange={handleTechSpec} className={form.input} placeholder="Ex: Italia" />
+                <input name="origin" value={product.techSpecs?.origin || ""} onChange={handleTechSpec} className={form.input}  />
             </div>
 
             {/* Kích thước  */}
             <div className={form.form1}>
                   <label>Dimensions (H-W-D):</label>
-                  <input name="dimensions" value={product.techSpecs?.dimensions || ""} onChange={handleTechSpec} className={form.input} placeholder="Ex: 340 - 290 - 390 mm" />
+                  <input name="dimensions" value={product.techSpecs?.dimensions || ""} onChange={handleTechSpec} className={form.input}  />
             </div>
 
             {/* Vật liệu */}
             <div className={form.form1}>
                 <label>Material:</label>
-                <input name="material" value={product.techSpecs?.material || ""} onChange={handleTechSpec} className={form.input} placeholder="Ex: Stainless Steel" />
+                <input name="material" value={product.techSpecs?.material || ""} onChange={handleTechSpec} className={form.input}  />
             </div>
 
             {/* Cân nặng */}
             <div className={form.form1}>
                 <label>Weight (kg):</label>
-                <input name="weight" type="weight" value={product.techSpecs?.weight || ""} onChange={handleTechSpec} className={form.input} placeholder="Ex: 19" />
+                <input name="weight" type="weight" value={product.techSpecs?.weight || ""} onChange={handleTechSpec} className={form.input}  />
             </div>
 
             {/* Điện áp của thiết bị */}
             <div className={form.form1}>
                   <label>Voltage:</label>
-                  <input name="voltage" value={product.techSpecs?.voltage || ""} onChange={handleTechSpec} className={form.input} placeholder="Ex: 220V" />
+                  <input name="voltage" value={product.techSpecs?.voltage || ""} onChange={handleTechSpec} className={form.input}  />
             </div>
 
             {/* Công suất tiêu thụ của thiết bị */}
             <div className={form.form1}>
                 <label>Wattage:</label>
-                <input name="wattage" value={product.techSpecs?.wattage || ""} onChange={handleTechSpec} className={form.input} placeholder="Ex: 1850W" />
+                <input name="wattage" value={product.techSpecs?.wattage || ""} onChange={handleTechSpec} className={form.input}  />
             </div>
               
           </div>
@@ -492,31 +493,31 @@ const handleAddVariant = () => {
               {/* Lưỡi xay */}
               <div className={form.form1}>
                   <label>Burrs:</label>
-                  <input name="burrs" value={product.techSpecs?.burrs || ""} onChange={handleTechSpec} className={form.input} placeholder="Ex: Conical, 83mm" />
+                  <input name="burrs" value={product.techSpecs?.burrs || ""} onChange={handleTechSpec} className={form.input} />
               </div>
 
               {/* Phễu hạt */}
               <div className={form.form1}>
                   <label>Hopper Capacity:</label>
-                  <input name="hopperCapacity" value={product.techSpecs?.hopperCapacity || ""} onChange={handleTechSpec} className={form.input} placeholder="Ex: 1.7 kg" />
+                  <input name="hopperCapacity" value={product.techSpecs?.hopperCapacity || ""} onChange={handleTechSpec} className={form.input} />
               </div>
 
               {/* Năng suất */}
               <div className={form.form1}>
                     <label>Productivity:</label>
-                    <input name="productivity" value={product.techSpecs?.productivity || ""} onChange={handleTechSpec} className={form.input} placeholder="Ex: 2.5 - 4 g/s" />
+                    <input name="productivity" value={product.techSpecs?.productivity || ""} onChange={handleTechSpec} className={form.input}  />
               </div>
 
               {/* Tốc độ xay */}
               <div className={form.form1}>
                     <label>Grinding Speed:</label>
-                    <input name="grindingSpeed" value={product.techSpecs?.grindingSpeed || ""} onChange={handleTechSpec} className={form.input} placeholder="Ex: 100, 150 rpm" />
+                    <input name="grindingSpeed" value={product.techSpecs?.grindingSpeed || ""} onChange={handleTechSpec} className={form.input}  />
               </div>
 
               {/* Điều chỉnh độ xay */}
               <div className={form.form1}>
                     <label>Grind Adjustment:</label>
-                    <input name="grindAdjustment" value={product.techSpecs?.grindAdjustment || ""} onChange={handleTechSpec} className={form.input} placeholder="Ex: Stepless" />
+                    <input name="grindAdjustment" value={product.techSpecs?.grindAdjustment || ""} onChange={handleTechSpec} className={form.input} />
               </div>
 
               {/* Set định lượng  */}
@@ -655,7 +656,7 @@ const handleAddVariant = () => {
                 <div key={`hl-${index}`} style={{ display: 'flex', gap: '15px', marginBottom: '15px' }}>
                     <input 
                         className={form.input}
-                        placeholder="Title"
+                        placeholder="Title Highlight Features"
                         value={feature.title} 
                         onChange={(e) => {
                             const newArr = [...(product.description?.highlightFeatures || [])];
@@ -666,7 +667,7 @@ const handleAddVariant = () => {
                     />
                     <input 
                         className={form.input}
-                        placeholder="content"
+                        placeholder="Content Highlight Features"
                         value={feature.content} 
                         onChange={(e) => {
                             const newArr = [...(product.description?.highlightFeatures || [])];
@@ -702,7 +703,7 @@ const handleAddVariant = () => {
                 <div key={`es-${index}`} style={{ display: 'flex', gap: '15px', marginBottom: '15px' }}>
                     <input 
                         className={form.input}
-                        placeholder="Title"
+                        placeholder="Title Essential Features"
                         value={feature.title} 
                         onChange={(e) => {
                             const newArr = [...(product.description?.essentialFeatures || [])];
@@ -713,7 +714,7 @@ const handleAddVariant = () => {
                     />
                     <input 
                         className={form.input}
-                        placeholder="content"
+                        placeholder="Content Essential Features"
                         value={feature.content} 
                         onChange={(e) => {
                             const newArr = [...(product.description?.essentialFeatures || [])];

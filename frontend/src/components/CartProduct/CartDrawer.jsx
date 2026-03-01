@@ -9,8 +9,6 @@ const CartDrawer = () => {
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0 );
   const totalPrice = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
 
-  // Lọc sản phẩm có màu
-
   useEffect(() => {
     if (isCartOpen) {
       document.body.style.overflow = "hidden";

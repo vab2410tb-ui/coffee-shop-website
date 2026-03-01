@@ -3,14 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 const ProductAccordion = ({ products, productDetail }) => {
-    // Lưu trữ danh sách các tab đang mở trong một mảng
     const [activeTabs, setActiveTabs] = useState([]);
 
     const toggleTab = (tabName) => {
         setActiveTabs((prevTabs) =>
             prevTabs.includes(tabName)
-                ? prevTabs.filter((t) => t !== tabName) // Nếu đang mở thì đóng lại
-                : [...prevTabs, tabName]               // Nếu đang đóng thì mở thêm
+                ? prevTabs.filter((t) => t !== tabName) 
+                : [...prevTabs, tabName]               
         );
     };
     return (

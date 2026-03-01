@@ -232,6 +232,7 @@ const ProductDetailPage = () => {
                         {item}
                     </li>
                 ))}
+
                 {/* ======= BEIGN: Product Accordion ====== */}
                 <div>
                     <ProductAccordion products={products} productDetail={productDetail}/>
@@ -243,8 +244,9 @@ const ProductDetailPage = () => {
             {/* ====== END LAYOUT: THông tin sản phẩm ====== */}
 
         </div>
-        {/* ====== BEGIN LAYOUT: Production Detail ====== */}
-        {/* ====== BEGIN: Intro Product */}
+        {/* ====== END LAYOUT: Production Detail ====== */}
+
+                {/* ====== BEGIN: Intro Product */}
                 <div>
                     <IntroProduct products={products} productDetail={productDetail}/>
                 </div>
