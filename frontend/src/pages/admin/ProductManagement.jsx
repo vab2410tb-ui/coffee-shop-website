@@ -1,9 +1,9 @@
 // src/pages/admin/ProductManagement.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faUser, faCartShopping  } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons';
 import ProductService from "../../service/productService.js"; 
-import AdminProductForm from "../../components/admin/AdminProductForm.jsx";
+import AdminProductForm from "../../components/Admin/AdminProductForm.jsx";
 import product_mgmt from './productmanagement.module.scss'
 
 function ProductManagement() {
@@ -24,16 +24,21 @@ function ProductManagement() {
     { id: 'coffee-beans', label: 'COFFEE BEANS' },
     { id: 'accessories', label: 'ACCESSORIES' },
   ];
+  
 
   // lấy danh sách sản phẩm từ server
-  const fetchProducts = async () => {
-    try {
-      const data = await ProductService.getAll(searchTerm, filterType, sortOrder);
-      setProducts(data);
-    } catch (err) {
-      console.error("Error loading data:", err);
-    }
-  };
+ const fetchProducts = useCallback(async () => {
+  try {
+    const data = await ProductService.getAll(
+      searchTerm,
+      filterType,
+      sortOrder
+    );
+    setProducts(data);
+  } catch (err) {
+    console.error("Fetch products failed:", err);
+  }
+}, [searchTerm, filterType, sortOrder]);
 
   useEffect(() => {
     if (editingId) {
@@ -44,14 +49,14 @@ function ProductManagement() {
   // Tự động gọi lại API khi đổi bộ lọc || nhập tìm kiếm
   useEffect(() => {
     fetchProducts();
-  }, [filterType, searchTerm, sortOrder]);
+  }, [fetchProducts]);
 
   // hàm xử lý xoá sản phẩm
   const handleDelete = async (id) => {
   if (window.confirm("Are you sure you want to delete this product?")) {
     try {
       await ProductService.remove(id);
-      fetchProducts();
+      await fetchProducts();
     } catch (err) {
       alert("Failed to delete the product. Please try again.");
     }
@@ -139,7 +144,7 @@ function ProductManagement() {
             <th style={{padding: '12px'}}>Product Name</th>
             <th style={{padding: '12px'}}>Category</th>
             <th style={{padding: '12px'}}>Price</th>
-            <th style={{padding: '12px'}}>Quantity</th>
+            <th style={{padding: '12px'}}>Quantity in Stock</th>
             <th style={{padding: '12px'}}>Action</th>
           </tr>
         </thead>
@@ -175,22 +180,57 @@ function ProductManagement() {
                             fontWeight: 'bold', 
                             color: '#333'
                         }}>
-                            {p.category ? p.category.toUpperCase() : 'KHÁC'}
+                            {p.category ? p.category.toUpperCase() : 'Another'}
                         </span>
                     </td>
 
                      {/* [Price] */}
                     <td style={{padding: '10px', fontWeight:'bold', textAlign: 'center'}}>{p.price?.toLocaleString()} VND</td>
 
-                     {/* [Quantity] */}
+
+                     {/* [Quantity in Stock] */}
                     <td style={{textAlign:'center'}}>
-                      {p.quantity > 0 ? (
-                          <span style={{color: 'green',background: '#ddeedf', padding: '4px 8px',borderRadius: '4px', fontWeight: 'bold'}}>
-                              {p.quantity} 
-                          </span>
+                      {/* Kiểm tra: Có mảng variants VÀ variant đầu tiên phải có điền tên màu */}
+                      {p.variants && p.variants.length > 0 && p.variants[0].color ? (
+                        <div style={{ display: 'flex', justifyContent: 'center' }}> 
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', padding:'10px 0', justifyContent: 'center'  }}>
+                            {p.variants.map((variant, Index) => (
+                              <div key={Index} style={{ display: 'flex', minWidth: '100px', fontSize: '13px', justifyContent:'flex-start' }}>
+                                <span style={{ display: 'flex',  gap: '6px', alignItems: 'center', width:'130px' }}>
+                                  <span style={{
+                                    display: 'inline-block',
+                                    width: '12px', 
+                                    height: '12px',
+                                    marginLeft: '50px',
+                                    borderRadius: '50%',
+                                    backgroundColor: variant.colorCode || '#ccc', 
+                                    border: '1px solid #999'
+                                  }}></span>
+                                  {variant.color}:
+                                </span>
+                                <span style={{
+                                  padding: '4px 8px', 
+                                  borderRadius: '4px',
+                                  fontWeight: 'bold',
+                                  color: variant.stock > 0 ? 'green' : 'red',
+                                  backgroundColor: variant.stock > 0 ? '#ddeedf' : '#ffe6e6', 
+                                }}>
+                                  {variant.stock > 0 ? variant.stock : 'Out of stock'}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       ) : (
-                          <span style={{color: 'red', fontWeight: 'bold', background: '#ffe6e6', padding: '4px 8px', borderRadius: '4px'}}>
-                              Out of stock
+                          <span style={{
+                            color: p.variants?.[0]?.stock > 0 ? 'green' : 'red',
+                            fontWeight: 'bold', 
+                            background: p.variants?.[0]?.stock > 0 ? '#ddeedf' : '#ffe6e6', 
+                            padding: '4px 8px', 
+                            borderRadius: '4px',
+                            display: 'inline-block'
+                          }}>
+                              {p.variants?.[0]?.stock > 0 ? p.variants[0].stock : 'Out of stock'}
                           </span>
                       )}
                     </td>

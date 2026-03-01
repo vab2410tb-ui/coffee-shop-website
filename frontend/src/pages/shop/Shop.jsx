@@ -1,7 +1,7 @@
 import shop from './shop.module.scss'
 import { Link } from 'react-router-dom';
 
-function Shop () {
+const Shop = () => {
     return (
         <>
         <div className={shop.container}>

@@ -13,6 +13,12 @@ const ProductService = {
         });
     },
 
+    getDetailProductsBySku: async (sku) => {
+        const url = `/products/${sku}`;
+        return axiosClient.get(url)
+    },
+
+    // ADMIN 
     // 2. Lấy chi tiết 1 sản phẩm (Dùng trong Admin Form)
     // http://localhost:8000/api/v1/admin/products/:id
     get: async (id) => {
@@ -21,7 +27,7 @@ const ProductService = {
         return axiosClient.get(url);
     },
 
-    // ADMIN 
+
     getAll: async (searchTerm, filterType, sortOrder) => {
         const url = '/admin/products';
         return axiosClient.get(url, { 

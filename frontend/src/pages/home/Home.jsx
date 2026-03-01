@@ -1,16 +1,25 @@
-import { useEffect, useState } from 'react';
-import {Link} from 'react-router-dom'
+import { useEffect, useState,  useContext} from 'react';
+import { Link, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp,  } from '@fortawesome/free-solid-svg-icons';
 import { faCalendar } from '@fortawesome/free-regular-svg-icons'
-import { SlideData, BeansData, AccData, ExploreData, BlogData } from '../../data/products.js'  
+import { SlideData, ExploreData, BlogData } from '../../data/products.js' 
+import { CartContext } from "../../features/ContextProvider.jsx";
+import productService from "../../service/productService"; 
+import HomeProductCard from '../../components/HomeCard/HomeProductCard.jsx';
 import home from './home.module.scss'
 
 
-function ProductPriceInfo() {
+
+function Home() {
+    const { dispatch } = useContext(CartContext);
+    const [beans, setBeans] = useState([]);
+    const [accessories, setAccessories] = useState([]);
     const [curIndex, setCurIndex] = useState(0)
     const [autoMoving, setAutoMoving] = useState(false)
+    const [, setPageLoading] = useState(false); 
 
+    const navigate = useNavigate();
     // const btnPre = () => {
     //     const firstSlide = curIndex === 0;
     //     const newSlide = firstSlide ? SlideData.length - 1 : curIndex -1;
@@ -29,6 +38,24 @@ function ProductPriceInfo() {
         }, 500)
 
     }
+    useEffect(() => {
+        const fetchProducts = async () => {
+            setPageLoading(true);
+            try {      
+                const [beansRes, accRes] = await Promise.all([
+                    productService.getProductsByCategory('coffee-beans'),
+                    productService.getProductsByCategory('accessories')
+                ]); 
+                setBeans(beansRes.data);
+                setAccessories(accRes.data) 
+            } catch (error) {
+                console.error("Error loading product:", error);
+            }
+            setPageLoading(false);
+        };
+
+        fetchProducts(); 
+    }, []);
 
     // Auto Moving
     useEffect(() => {
@@ -51,10 +78,11 @@ function ProductPriceInfo() {
                 {SlideData.map((item , index) =>(
                         <div className={home.banner} key={index} >
                             <img src={item.src} alt="" />
+                       
                             <div className={home.title}>
                                 <h2>{item.title}</h2>
                                 <h3>{item.title2}</h3>
-                                <button>{item.btn}</button>
+                                <button onClick={() => navigate(item.link)}>{item.btn}</button>
                             </div>
                         </div>   
                 ))}
@@ -92,22 +120,27 @@ function ProductPriceInfo() {
                 </div>
 
                 <div>
-                    <div className={home.wrapper}>
-                        <img 
-                        src="https://res.cloudinary.com/drrao1nzd/image/upload/v1770301441/nab_coffee/products/main/j6uqabnuweyaf1cyzwci.jpg" 
-                        alt="Micra" 
-                    />
-                    </div>
+                    <Link to='/products/EM-MICRA'>
+                        <div className={home.wrapper}>
+                            <img 
+                            src="https://res.cloudinary.com/drrao1nzd/image/upload/v1770301441/nab_coffee/products/main/j6uqabnuweyaf1cyzwci.jpg" 
+                            alt="Micra" 
+                        />
+                        </div>
+                    </Link>
                     <h3>Linea Micra</h3>
                     <p>103.000.000 VND</p>
                 </div>
+                
                 <div>
-                    <div className={home.wrapper}>
-                        <img  
-                        src="https://res.cloudinary.com/drrao1nzd/image/upload/v1770301446/nab_coffee/products/main/mp6mryfctrpnfkd1mt22.jpg" 
-                        alt="Mini" 
-                    />
-                    </div>
+                    <Link to='/products/EM-MINI'>
+                        <div className={home.wrapper}>
+                            <img  
+                            src="https://res.cloudinary.com/drrao1nzd/image/upload/v1770301446/nab_coffee/products/main/mp6mryfctrpnfkd1mt22.jpg" 
+                            alt="Mini" 
+                        />
+                        </div>
+                    </Link>
                     <h3>Linea Mini</h3>
                     <p>130.000.000 VND</p>
                 </div>      
@@ -115,75 +148,95 @@ function ProductPriceInfo() {
 
             {/* SECTION TWO */}
             <section className={`${home['introprd__section-1']}`}>
-                <div className={home.card}>
-                    <img 
-                        src="https://res.cloudinary.com/drrao1nzd/image/upload/v1770301903/nab_coffee/products/main/jijdijhhqqql2fqmxp87.jpg" 
-                        alt="New up"
-                    /> 
-                    <h2>New up Shelves</h2>
-                    <p>View our products</p>
-                    <span>
-                        <FontAwesomeIcon icon={faArrowUp} />
-                    </span>
-                </div>
+                 <Link to='/shop/grinder-machine'>
+                    <div className={home.card}>
+                        <img 
+                            src="https://res.cloudinary.com/drrao1nzd/image/upload/v1770301903/nab_coffee/products/main/jijdijhhqqql2fqmxp87.jpg" 
+                            alt="New up"
+                        /> 
+                        <h2>New up Shelves</h2>
+                        <p>View our products</p>
+                        <span>
+                            <FontAwesomeIcon icon={faArrowUp} />
+                        </span>
+                    </div>
+                </Link>
 
                 <div>
+                    <Link to='/products/CG-PICO'>
                     <div className={home.wrapper}>
                         <img 
-                        src="https://res.cloudinary.com/drrao1nzd/image/upload/v1770433053/nab_coffee/products/main/d1yy0gnw6w4ucp1ulcvd.jpg" 
+                        src="https://res.cloudinary.com/drrao1nzd/image/upload/v1771982974/pico_k37wvu.jpg"
                         alt="Pico" 
                         />
                         <span>NEW</span>
                     </div>
+                    </Link>
                     <h3>Pico</h3>
                     <p>27.000.000 VND</p>
                 </div>
                 <div>
-                    <div className={home.wrapper}>
-                        <img  
-                        src="https://res.cloudinary.com/drrao1nzd/image/upload/v1770433058/nab_coffee/products/main/dvaxzrwqgkkwb9udriz9.jpg" 
-                        alt="LevaX1" 
-                    />
-                    <span>NEW</span>
-                    </div>
+                    <Link to='/products/EM-LEVA-X1'>
+                        <div className={home.wrapper}>
+                            <img  
+                            src="https://res.cloudinary.com/drrao1nzd/image/upload/v1771982975/levaX_axppg7.jpg" 
+
+                            alt="LevaX1" 
+                            />
+                            <span>NEW</span>
+                        </div>
+                    </Link>
                     <h3>LEVA X 1 GROUP</h3>
                     <p>282.900.000 VND</p>
                 </div>      
             </section>
 
-            {/* SECTION THREE */}
+            {/* SECTION THREE: COFFEE BEANS */}
             <section className={`${home['introprd__section-2']}`}>
                 <div className={home.line}></div>
                 <h2>COFFEE BEANS</h2>
                 <div className={home.cardbeans}>
-                    {BeansData.map((item, index) => (
-                        <div className={home.card} key={index}>
-                            <div>
-                                <img src={item.src} alt="" />
-                            </div>
-                            <h3>{item.title}</h3>
-                            <p>{item.price}</p>
+                    {beans.map((product, index) => (
+                        <div key={index}>
+                            <HomeProductCard key={product._id}  product={product}  home={home} dispatch={dispatch} />
                         </div>
                     ))}
                 </div>
-                <div className={home.line}></div>
-            </section>
+                <Link to='/shop/coffee-beans'>
+                    <p style={{
+                        marginBottom:'20px', display:'flex', justifyContent: 'flex-end', 
+                        textDecoration:'underline solid #000', cursor:'pointer', 
+                        textDecorationSkipInk:'none', color:'#000'}}
+                    >
+                        View all products
+                    </p>
 
-            {/* SECTION FOUR */}
+                </Link>
+                <div className={home.line}></div>
+             </section>
+
+            {/* SECTION FOUR: ACCESSORIES */}
             <section className={`${home['introprd__section-2']}`}>
                 <h2>COFFEE BEANS</h2>
                 <div className={home.cardbeans} >
-                    {AccData.map((item, index) => (
-                        <div className={home.card} key={index}>   
-                            <div>
-                                <img src={item.src} alt="" />
-                            </div>
-                            <h3>{item.title}</h3>
-                            <p>{item.price}</p>
-                        </div>
+                    {accessories.map((product, index) => (
+                       <div key={product._id}>
+                    <HomeProductCard product={product} home={home} dispatch={dispatch} />
+                </div>
                     ))}
                 </div>
+        
+                <Link to='/shop/accessories'>
+                <p style={{
+                    marginBottom:'20px', display:'flex', justifyContent: 'flex-end', 
+                    textDecoration:'underline solid #000', cursor:'pointer', 
+                    textDecorationSkipInk:'none', color:'#000'}}
+                >
+                    View all products
+                </p>
                 <div className={home.line}></div>
+
+        </Link>
             </section>
         </div>
         {/* END sections: Intro products */}    
@@ -197,7 +250,9 @@ function ProductPriceInfo() {
                 
                 ))}
             </div>
+            
         </div>  
+        
         {/* END sections: EXPOLORE  */}
 
         {/* START sections: BLOG  */}
@@ -220,4 +275,4 @@ function ProductPriceInfo() {
     );
 }
 
-export default ProductPriceInfo;
+export default Home;

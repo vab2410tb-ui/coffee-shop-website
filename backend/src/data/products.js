@@ -17,7 +17,46 @@ const products = [
       "coffeeBoiler": "1.6 liters",
       "steamBoiler": "0.25 liters",
       "material": "Stainless Steel"
-    }
+    },
+    "variants": [
+      {
+        "color": "Black",
+        "colorCode": "#000000",
+        "stock": 5,
+        "images": [
+          "https://res.cloudinary.com/drrao1nzd/image/upload/v1770301441/nab_coffee/products/main/j6uqabnuweyaf1cyzwci.jpg",
+          "https://res.cloudinary.com/drrao1nzd/image/upload/v1770301441/nab_coffee/products/main/j6uqabnuweyaf1cyzwci.jpg" 
+        ]
+      },
+      {
+        "color": "Yelow",
+        "colorCode": "#FBCC4B",
+        "stock": 0,
+        "images": [
+          "https://res.cloudinary.com/drrao1nzd/image/upload/v1770301441/nab_coffee/products/main/j6uqabnuweyaf1cyzwci.jpg",
+          "https://res.cloudinary.com/drrao1nzd/image/upload/v1770301441/nab_coffee/products/main/j6uqabnuweyaf1cyzwci.jpg"
+        ]
+      },
+      {
+        "color": "White",
+        "colorCode": "#FFF",
+        "stock": 2,
+        "images": [
+          "https://res.cloudinary.com/drrao1nzd/image/upload/v1770301441/nab_coffee/products/main/j6uqabnuweyaf1cyzwci.jpg",
+          "https://res.cloudinary.com/drrao1nzd/image/upload/v1770301441/nab_coffee/products/main/j6uqabnuweyaf1cyzwci.jpg"
+        ]
+      },
+      {
+        "color": "Sky Blue",
+        "colorCode": "#ABCDEF",
+        "stock": 2,
+        "images": [
+          "https://res.cloudinary.com/drrao1nzd/image/upload/v1770301441/nab_coffee/products/main/j6uqabnuweyaf1cyzwci.jpg",
+          "https://res.cloudinary.com/drrao1nzd/image/upload/v1770301441/nab_coffee/products/main/j6uqabnuweyaf1cyzwci.jpg"
+        ]
+      }
+    ],
+    "lifestyleImages": [],
 },
   {
     "sku": "EM-MINI",

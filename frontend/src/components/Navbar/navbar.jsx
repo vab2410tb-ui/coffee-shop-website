@@ -1,16 +1,20 @@
 import {Link} from "react-router-dom"
-import { CartContext } from "../../features/ContextProvider";
-import header from "./navbar.module.scss"
+import { useContext} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faUser, faCartShopping, faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { useContext } from "react";
+import { CartContext } from "../../features/ContextProvider";
+import header from "./navbar.module.scss"
+
 
 function Heading () {
-    const {cart} = useContext(CartContext)
+    const { toggleCart, cart } = useContext(CartContext);
+    const totalItems = cart.reduce(
+        (sum, item) => sum + item.quantity, 0
+    );
     return (
         <div className={header.header}>
             <div className={header.header__logo}>
-                <img src="/image.png" alt="" />
+                <img src="/icon/image.png" alt="" />
             </div>
             <div className={`${header['header__main-nav']}`}>
                 <ul className={header.header__list}>
@@ -50,12 +54,11 @@ function Heading () {
                     <li><FontAwesomeIcon icon={faUser} className={header.icon} /></li>
                     <li><FontAwesomeIcon icon={faMagnifyingGlass} className={header.icon} /></li>
                     <li>
-                        <Link>
-                            <div className={header.iconWrapper}>
-                                <FontAwesomeIcon icon={faCartShopping} className={header.icon} />
-                                <span className={header.badge}>{cart.length}</span>
-                            </div>
-                        </Link>
+                        <div className={header.iconWrapper} onClick={() => toggleCart(true)}>
+                            <FontAwesomeIcon icon={faCartShopping} className={header.icon} />
+                            <span className={header.badge}>{totalItems}</span>
+                        </div>
+
                     </li>
                         
                 </ul>

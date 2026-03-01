@@ -43,11 +43,26 @@ const shopController = {
         });
     }
 },
-
+    // [GET] /api/v1/products/:sku
+    getProductsBySku : async (req, res) => {
+        const { sku } = req.params;
+        try {
+            const products = await Products.findOne({sku})
+            return res.status(200).json({
+                success: true,
+                data: products
+            });
+        }catch (error) {
+            return res.status(500).json({ 
+                success: false, 
+                message: error.message 
+            });
+        }
+    },
     // [GET] /api/v1/products
     getAllProducts: async (req, res) => {
         try {
-            const products = await Product.find({});
+            const products = await Products.find({});
             return res.status(200).json({
                 success: true,
                 data: products
@@ -63,7 +78,7 @@ const shopController = {
     // [GET] /api/v1/products/detail/:id
     getProductDetail: async (req, res) => {
         try {
-            const product = await Product.findById(req.params.id);
+            const product = await Products.findById(req.params.id);
             
             if (!product) {
                 return res.status(404).json({ 

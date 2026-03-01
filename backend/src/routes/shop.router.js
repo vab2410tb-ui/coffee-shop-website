@@ -8,9 +8,13 @@ const router = express.Router();
 // URL: /api/v1/products/category/espresso-machine
 router.get('/category/:slug', shopController.getProductsByCategory);
 
-// 2. Route lấy chi tiết 1 sản phẩm
+// 2. Route lấy chi tiết 1 sản phẩm bằng id
 // URL: /api/v1/products/detail/:id
 router.get('/detail/:id', shopController.getProductDetail);
+
+// 3.Route Route lấy chi tiết 1 sản phẩm bằng sku
+// URL: /api/v1/products/:sku
+router.get('/:sku', shopController.getProductsBySku)
 
 // 3. Route lấy tất cả
 // URL: /api/v1/products

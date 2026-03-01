@@ -21,7 +21,16 @@ const productSchema = new mongoose.Schema({
 
   price: { type: Number, required: true },
 
-  quantity: { type: Number, default: 0},
+  variants: [
+    {
+      color: { type: String, required: true },     
+      colorCode: { type: String, required: true }, 
+      stock: { type: Number, required: true, default: 0 }, 
+      images: [{ type: String }]                   
+    }
+  ],
+
+  lifestyleImages: [{type: String}],
 
   category: { 
     type: String, 
@@ -35,7 +44,22 @@ const productSchema = new mongoose.Schema({
 
   detailImages: [{ type: String }],
 
-  description: { type: String },
+  description: { 
+    productFeatures: {type: [String], default: [] },
+    introText: [{ 
+      title: {  type: String },
+      content: { type: String }
+    }], 
+    middleBannerImage: [{ type: String }], 
+    highlightFeatures: [{
+      title: { type: String },
+      content: { type: String } 
+    }],
+    essentialFeatures: [{
+      title: { type: String },
+      content: { type: String }
+    }]
+   },
 
   inStock: { type: Boolean, default: true },
   
@@ -43,7 +67,7 @@ const productSchema = new mongoose.Schema({
     // 1. Nhóm dùng chung
     origin: { type: String }, // Xuất xứ 
     dimensions: { type: String },// H-W-D 
-    weight: { type: Number },// Trọng lượng 
+    weight: { type: String },// Trọng lượng 
     voltage: { type: String },// Electrical Specs 
     wattage: { type: String },// Wattage Elements 
     
@@ -59,7 +83,14 @@ const productSchema = new mongoose.Schema({
     productivity: { type: String },// Productivity (g/s)
     grindAdjustment: { type: String },// Grind Adjustment
     grindingSpeed: { type: String },// Grinding Speed
-    programmableDose: { type: Boolean }// Programmable Dose (Yes -> true, No -> false)
+    programmableDose: { type: Boolean },// Programmable Dose (Yes -> true, No -> false)
+
+    // 4. (Accessories)
+    diameter: {type: String},
+    material: {type: String},
+    distributionSideMaximumDepth: {type: String},
+    tamperSideMaximumDepth: {type: String},
+    ApproximateWeight: {type: String} 
   },
 
 }, { timestamps: true });
