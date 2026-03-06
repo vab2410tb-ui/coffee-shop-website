@@ -1,7 +1,7 @@
 // src/services/axiosClient.js
 import axios from 'axios';
 
-const API_URL = `${import.meta.env.REACT_API_BASE_URL}/api/v1`;
+const API_URL = `${import.meta.env.REACT_APP_API_BASE_URL}/api/v1`;
 
 const axiosClient = axios.create({
   baseURL: API_URL,
