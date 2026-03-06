@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import ProductService from '../../service/iproductService.js';
-import AdminProductForm from '../../components/Admin/AdminProductForm.jsx';
+import AdminProductForm from '../../components/Admind/AdminProductForm.jsx';
 import product_mgmt from './productmanagement.module.scss';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
 
