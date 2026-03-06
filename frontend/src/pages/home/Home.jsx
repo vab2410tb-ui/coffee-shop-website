@@ -193,7 +193,7 @@ function Home() {
           <div className={home.line}></div>
           <h2>COFFEE BEANS</h2>
           <div className={home.cardbeans}>
-            {beans.map((product, index) => (
+            {beans?.map((product, index) => (
               <div key={index}>
                 <HomeProductCard
                   key={product._id}
@@ -226,7 +226,7 @@ function Home() {
         <section className={`${home['introprd__section-2']}`}>
           <h2>COFFEE BEANS</h2>
           <div className={home.cardbeans}>
-            {accessories.map((product, index) => (
+            {accessories?.map((product, index) => (
               <div key={index}>
                 <HomeProductCard
                   key={product._id}
@@ -262,7 +262,7 @@ function Home() {
       <div className={home.explore}>
         <h2>EXPLORE #NABCOFFEESHOP</h2>
         <div className={home.girdlayout}>
-          {ExploreData.map((item, index) => (
+          {ExploreData?.map((item, index) => (
             <img src={item.src} alt={`Coffee product ${index}`} key={index} />
           ))}
         </div>
@@ -275,7 +275,7 @@ function Home() {
         <div className={home.line}></div>
         <h2>BLOG POST</h2>
         <div className={home.blog__card}>
-          {BlogData.map((item, index) => (
+          {BlogData?.map((item, index) => (
             <div key={index}>
               <img src={item.src} alt="" />
               <p>
