@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { CartContext } from '../../features/ContextProvider.jsx';
-import productService from '../../service/productService.js';
+import productService from '../../service/ProductService.js';
 import category from './categorypage.module.scss';
 import ProductItem from '../../components/ProductItem/ProductItem.jsx';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
