@@ -67,8 +67,11 @@ const Auth = () => {
       const userData = await userService.getProfile(freshToken); 
       console.log("Step 2: getProfile success!", userData);
 
-      // Cuối cùng mới gọi login để lưu vào Context & LocalStorage
-      login(userData); 
+      const finalUserData = {
+          ...userData,
+          token: freshToken 
+      };
+      login(finalUserData);
 
       alert('Login successful!');
       navigate(from, { replace: true });
