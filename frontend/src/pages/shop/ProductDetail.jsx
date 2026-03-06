@@ -24,8 +24,8 @@ const ProductDetailPage = () => {
 
   // Số lượng của màu đã chọn ở trong giỏ hàng
   const itemInCart = cart.find(
-    (item) => item._id === products._id && item.colorCode === selectedVariant?.colorCode,
-  );
+  (item) => item._id === products?._id && item.colorCode === selectedVariant?.colorCode,
+);
   // Lọc sản phẩm có màu
   const validVariants = products?.variants?.filter((v) => v.color);
 
@@ -94,8 +94,8 @@ const ProductDetailPage = () => {
           {selectedVariant?.images?.length > 0 ? (
             selectedVariant?.images?.map((img, index) => (
               <img
-                src={img || products.mainImage}
-                alt={products.name}
+                src={img || products?.mainImage}
+                alt={products?.name}
                 key={index}
                 style={{
                   overflow: 'hidden',

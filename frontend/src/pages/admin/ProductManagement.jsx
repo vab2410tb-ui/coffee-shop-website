@@ -166,7 +166,7 @@ function ProductManagement() {
                 </td>
               </tr>
             ) : (
-              products.map((p, index) => (
+              products?.map((p, index) => (
                 <tr key={p._id} style={{ borderBottom: '1px solid #eee' }}>
                   {/* [No] */}
                   <td style={{ padding: '10px', textAlign: 'center' }}>{index + 1}</td>
@@ -223,7 +223,7 @@ function ProductManagement() {
                             justifyContent: 'center',
                           }}
                         >
-                          {p.variants.map((variant, Index) => (
+                          {p?.variants?.map((variant, Index) => (
                             <div
                               key={Index}
                               style={{
