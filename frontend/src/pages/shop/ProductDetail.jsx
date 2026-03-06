@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { CartContext } from '../../features/ContextProvider';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
-import productService from '../../service/productService.js';
+import productService from '../../service/iproductService.js';
 import productDetail from './productdetail.module.scss';
 import Loading from '../../components/Loading/Loading.jsx';
 import ProductAccordion from '../../components/ProductItem/ProductAccordion.jsx';
