@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/v1/authentication/profile`;
+const API_URL = `${import.meta.env.REACT_API_BASE_URL}/api/v1/authentication/profile`;
 
 const axiosUpload = axios.create({
   baseURL: API_URL,

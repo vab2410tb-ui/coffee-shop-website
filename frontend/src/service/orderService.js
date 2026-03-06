@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/v1/orders`;
+const API_URL = `${import.meta.env.REACT_API_BASE_URL}/api/v1/orders`;
 
 const OrderService = {
 
