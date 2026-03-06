@@ -5,7 +5,7 @@ import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { SlideData, ExploreData, BlogData } from '../../data/products.js';
 import { CartContext } from '../../features/ContextProvider.jsx';
-import productService from '../../service/productService.js';
+import productService from '../../service/iproductService.js';
 import HomeProductCard from '../../components/HomeCard/HomeProductCard.jsx';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx'
 import home from './home.module.scss';

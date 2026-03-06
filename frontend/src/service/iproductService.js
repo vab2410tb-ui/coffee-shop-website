@@ -1,4 +1,4 @@
-import axiosClient from './clientService.js';
+import axiosClient from './iclientService.js';
 
 const ProductService = {
   // 1. Lấy sản phẩm theo danh mục (Dành cho khách hàng)
