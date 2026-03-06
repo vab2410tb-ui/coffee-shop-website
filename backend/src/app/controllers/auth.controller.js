@@ -1,95 +1,83 @@
 import User from '../models/user.modal.js';
-import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 
-// Cấu hình Nodemailer
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, 
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-    family: 4 
-  });
 
-    //Yêu cầu gửi mã OTP
+// ------------- [GỬI MÃ OTP QUA EMAILJS] ------------- 
 export const requestOTP = async (req, res) => {
     try {
         const { email } = req.body;
-
+        
+        // Tạo mã OTP 6 số ngẫu nhiên
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-        // hash OTP
-        const salt = await bcrypt.genSalt(10);
-        const hashedOTP = await bcrypt.hash(otp, salt);
-
+        
         const otpExpires = new Date(Date.now() + 5 * 60 * 1000);
 
         let user = await User.findOne({ email });
 
         if (!user) {
-            user = new User({ email, otp: hashedOTP, otpExpires });
+            user = new User({ email, otp, otpExpires });
         } else {
-            user.otp = hashedOTP;
+            user.otp = otp;
             user.otpExpires = otpExpires;
         }
-
         await user.save();
 
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: 'Login verification code',
-            html: `<h3>Your OTP code is: <b>${otp}</b></h3><p>This code will expire in 5 minutes.</p>`
-        };
+        // GỌI API EMAILJS (Vượt tường lửa Render)
+        const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                service_id: process.env.EMAILJS_SERVICE_ID,
+                template_id: process.env.EMAILJS_OTP_TEMPLATE_ID, 
+                user_id: process.env.EMAILJS_PUBLIC_KEY,
+                accessToken: process.env.EMAILJS_PRIVATE_KEY,
+                template_params: {
+                    to_email: email,
+                    otp_code: otp 
+                }
+            })
+        });
 
-        await transporter.sendMail(mailOptions);
-
-        res.status(200).json({ message: 'The OTP has been sent to your email!' });
+        if (response.ok) {
+            res.status(200).json({ message: 'The OTP has been sent to your email!' });
+        } else {
+            const errorText = await response.text();
+            throw new Error(`EmailJS Error: ${errorText}`);
+        }
 
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
 
-// Xác thực mã OTP và cấp Token
+// ------------- [XÁC THỰC OTP] ------------- 
 export const verifyOTP = async (req, res) => {
     try {
         const { email, otp } = req.body;
+        const user = await User.findOne({ email });
 
-        const user = await User.findOne({ email: email });
-
-        // Kiểm tra user có tồn tại và mã OTP có khớp không
+        // Kiểm tra user và so sánh trực tiếp 
         if (!user || user.otp !== otp) {
             return res.status(400).json({ message: 'Invalid OTP code' });
         }
 
-        // Kiểm tra thời gian hết hạn
         if (user.otpExpires < new Date()) {
-            return res.status(400).json({ message: 'The OTP has expired, please request a new code' });
+            return res.status(400).json({ message: 'The OTP has expired' });
         }
 
-        // Xác thực thành công: Xóa mã OTP đi để bảo mật
+        // Xóa OTP sau khi dùng
         user.otp = undefined;
         user.otpExpires = undefined;
         await user.save();
 
-        // Tạo JWT Token cho user
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
         res.status(200).json({
             _id: user._id,
             name: user.name,
             email: user.email,
-            address: user.address,
-            phone: user.phone,
-            isAdmin: user.isAdmin,
             token
         });
-
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }

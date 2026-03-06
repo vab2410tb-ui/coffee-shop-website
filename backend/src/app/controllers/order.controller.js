@@ -8,35 +8,32 @@ import nodemailer from 'nodemailer';
 
 export const sendMailInternal = async (userEmail, orderInfo) => {
   try {
-    const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, 
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-    family: 4 
-  });
+    const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        service_id: process.env.EMAILJS_SERVICE_ID,
+        template_id: process.env.EMAILJS_TEMPLATE_ID,
+        user_id: process.env.EMAILJS_PUBLIC_KEY,
+        accessToken: process.env.EMAILJS_PRIVATE_KEY, // Đây là Private Key
+        template_params: {
+          to_email: userEmail,
+          full_name: orderInfo.fullName,
+          order_id: orderInfo.orderId,
+          total_price: Number(orderInfo.totalPrice).toLocaleString(),
+          address: orderInfo.address
+        }
+      })
+    });
 
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: userEmail,
-      subject: `[Confirmation] Order #${orderInfo.orderId} successfully`,
-      html: `
-        <h3>Hello ${orderInfo.fullName},</h3>
-        <p>Thank you for your order!</p>
-        <p>Your order <b>#${orderInfo.orderId}</b> has been successfully received.</p>
-        <p><b>Total :</b> ${Number(orderInfo.totalPrice).toLocaleString()} VND</p>
-        <p><b>Shipping address:</b> ${orderInfo.address}</p>
-        <br/>
-        <p>We will process your order shortly.</p>
-        <p>Thank you for shopping with us!</p>
-      `,
-    };
-
-    await transporter.sendMail(mailOptions);
-    console.log(`Email sent to: ${userEmail} `);
+    if (response.ok) {
+      console.log(`EmailJS sent successfully to: ${userEmail}`);
+    } else {
+      const errorText = await response.text();
+      console.error("EMAILJS API ERROR: ", errorText);
+    }
   } catch (error) {
     console.error("EMAIL SENDING ERROR: ", error.message);
   }
