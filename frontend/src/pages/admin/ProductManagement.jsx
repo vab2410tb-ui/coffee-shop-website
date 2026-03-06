@@ -2,8 +2,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import ProductService from '../../service/iproductService.js';
-import AdminProductForm from '../../components/Admin/AdminProductForm.jsx';
+import ProductService from '../../service/productService.js';
+import AdminProductForm from '../../components/Admin1/AdminProductForm.jsx';
 import product_mgmt from './productmanagement.module.scss';
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';
 

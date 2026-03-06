@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ProductService from '../../service/iproductService.js';
-import UploadService from '../../service/iuploadService.js';
+import ProductService from '../../service/productService.js';
+import UploadService from '../../service/uploadService.js';
 import form from './adminproductform.module.scss';
 
 const DEFAULT_TECH_SPECS = {
