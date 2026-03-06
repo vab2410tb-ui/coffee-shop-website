@@ -113,8 +113,10 @@ const CheckoutPage = () => {
         if (data.success) {
           localStorage.removeItem('savedNote');
           dispatch({ type: 'CLEAR_CART' });
-          navigate(`/confirmed/${data.order.orderId}`); 
-        }
+          navigate(`/confirmed/${data.order.orderId}`, { 
+            state: { email: shippingInfo.email } 
+          });
+        } 
       } catch (errorMessage) {
           alert(errorMessage); 
           console.error('Checkout Error:', errorMessage);

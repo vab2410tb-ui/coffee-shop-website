@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import orderService from '../../service/orderService.js'
 import srcorderstyle from './srcorderstyle.module.scss'
 import PageTitle from '../../components/PageTitle/PageTitle.jsx';

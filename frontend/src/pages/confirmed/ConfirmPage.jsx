@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams, NavLink, useNavigate } from 'react-router-dom';
+import { Link, useParams, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import orderService from '../../service/orderService.js';
@@ -12,11 +12,14 @@ const ConfirmPage = () => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
+    const location = useLocation();
+    const email = location.state?.email;
+
     useEffect(() => {
         const fetchOrder = async () => {
             try {
                 setLoading(true);
-                const response = await orderService.getOrderByID(orderId);
+                const response = await orderService.getOrderByID(orderId, email);
                 if (response.success) {
                     setOrderData(response.order); 
                 }
@@ -28,7 +31,7 @@ const ConfirmPage = () => {
         };
 
         if (orderId) fetchOrder();
-    }, [orderId]);
+    }, [orderId, email]);
 
 
     if (loading) {
