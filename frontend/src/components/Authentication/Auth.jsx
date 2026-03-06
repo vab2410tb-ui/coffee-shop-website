@@ -52,17 +52,22 @@ const Auth = () => {
       return;
     }
 
-    try {
+   try {
       setLoading(true);
       setMessage('');
       
-  
+      // Lấy kết quả trả về từ Backend (Bao gồm cả Token)
       const verifyResult = await authService.verifyOTP(email, cleanOtp); 
-      console.log("Bước 1: verifyOTP thành công!", verifyResult);
+      console.log("Step 1: verifyOTP success!", verifyResult);
 
-      const userData = await userService.getProfile(); 
-      console.log("Bước 2: getProfile thành công!", userData);
+      // Lấy Token ra (Tuỳ vào file authService của bạn trả về data hay trả thẳng object)
+      const freshToken = verifyResult.token || verifyResult.data?.token;
 
+      // Truyền trực tiếp Token mới cứng vào để lấy Profile
+      const userData = await userService.getProfile(freshToken); 
+      console.log("Step 2: getProfile success!", userData);
+
+      // Cuối cùng mới gọi login để lưu vào Context & LocalStorage
       login(userData); 
 
       alert('Login successful!');
