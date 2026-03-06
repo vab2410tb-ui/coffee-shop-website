@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api/v1/authentication/profile';
+const API_URL = `${process.env.REACT_APP_API_URL}/authentication/profile`;
 
 // Hàm phụ trợ để tự động lấy Token từ localStorage đính kèm vào Header
 const getAuthHeader = () => {
