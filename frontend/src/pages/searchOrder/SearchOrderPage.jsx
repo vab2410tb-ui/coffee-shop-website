@@ -11,12 +11,13 @@ const SearchOrder = () => {
     const [orderDetail, setOrderDetail] = useState(null);
     const [error, setError] = useState('');
 
-    useEffect(() => {
-        
-    })
-
     const handleSearch = async (e) => {
         e.preventDefault();
+
+        if (!orderCode || !email) {
+        setError('Please enter both Order ID and Email.');
+        return;
+        }
         setError('');
         setOrderDetail(null);
 

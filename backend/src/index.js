@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import db from './config/db/index.js';
 import route from './routes/index.router.js';
+import keepAlive from './keepAlive.js';
 
 dotenv.config();
 
@@ -25,4 +26,5 @@ route(app);
 
 app.listen(port, "0.0.0.0", () => {
   console.log(`App listening on port http://localhost:${port}`)
+  keepAlive();
 })
