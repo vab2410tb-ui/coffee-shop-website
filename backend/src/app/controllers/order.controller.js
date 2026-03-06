@@ -130,7 +130,7 @@ const orderId = generateOrderId();
     await session.commitTransaction();
     session.endSession();
 
-    sendMailInternal(email, {
+    await sendMailInternal(email, {
       orderId: orderId, 
       fullName: fullName,
       totalPrice: totalPrice,
