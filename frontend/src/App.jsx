@@ -7,7 +7,7 @@ import CategoryPage from './pages/shop/CategoryPage.jsx';
 import ProductDetailPage from './pages/shop/ProductDetail.jsx';
 import WarrantyPage from './pages/warranty/Warranty.jsx';
 import ContactPage from './pages/contact/Contact.jsx';
-import ProductManagement from './pages/admin/ProductManagement.jsx';
+import ProductManagement from './pages/admind/ProductManagement.jsx';
 import Auth from './components/Authentication/Auth.jsx';
 import Profile from './components/Profile/Profile.jsx';
 import Orders from './components/Orders/Orders.jsx';
