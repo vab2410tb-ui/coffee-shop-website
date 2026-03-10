@@ -53,9 +53,7 @@ export const verifyOTP = async (req, res) => {
     try {
         const { email, otp } = req.body;
         const user = await User.findOne({ email });
-        console.log("👉 OTP Khách nhập:", String(otp));
-        console.log("👉 OTP Trong DB:", user.otp);
-
+        
         // Ép kiểu String(otp) để tránh lỗi 400 do khác kiểu dữ liệu (số vs chữ)
         if (!user || user.otp !== String(otp)) {
             return res.status(400).json({ message: 'Invalid OTP code' });
