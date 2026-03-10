@@ -16,6 +16,7 @@ import CheckoutPage from './pages/checkout/CheckOutPage.jsx';
 import ConfirmPage from './pages/confirmed/ConfirmPage.jsx';
 import SearchOrder from './pages/searchOrder/SearchOrderPage.jsx';
 
+
 const App = () => {
   return (
     <div className="app">
