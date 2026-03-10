@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
       try {
         setUserInfo(JSON.parse(storedUser));
       } catch (error) {
-        console.error('Lỗi phân tích dữ liệu user, đang tiến hành dọn dẹp:', error);
+        console.error('Failed to parse user data. Cleaning up invalid data:', error);
         localStorage.removeItem('userInfo');
       }
     }

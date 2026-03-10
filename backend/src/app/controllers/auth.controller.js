@@ -1,13 +1,12 @@
 import User from '../models/user.modal.js';
 import jwt from 'jsonwebtoken';
-
+import crypto from 'crypto';
 // ------------- [GỬI MÃ OTP QUA EMAILJS] ------------- 
 export const requestOTP = async (req, res) => {
     try {
         const { email } = req.body;
         
-        // Tạo mã OTP 6 số ngẫu nhiên dưới dạng chuỗi (String)
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otp = crypto.randomInt(100000, 1000000).toString();
         const otpExpires = new Date(Date.now() + 5 * 60 * 1000);
 
         let user = await User.findOne({ email });

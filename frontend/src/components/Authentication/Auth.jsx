@@ -23,7 +23,7 @@ const Auth = () => {
   const handleRequestOTP = async (e) => {
     e.preventDefault();
     if (!email) {
-      setMessage('Please enter the OTP code!');
+      setMessage('Please enter your email!');
       return;
     }
 
