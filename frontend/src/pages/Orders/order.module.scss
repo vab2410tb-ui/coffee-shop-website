@@ -17,6 +17,9 @@
     &:hover {
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
       cursor: pointer;
+      .imgWrapper::before{
+        opacity: 1;
+      }
     }
 
     .cardText {
@@ -46,10 +49,6 @@
       transition: 0.3s;
       font-size: 32px;
       border-radius: 20px;
-    }
-
-    &:hover::before {
-      opacity: 1;
     }
   }
 }
