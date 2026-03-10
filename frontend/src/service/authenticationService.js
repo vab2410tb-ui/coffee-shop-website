@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// Đổi tên biến cho khớp
 const API_URL = `${process.env.REACT_APP_API_BASE_URL}/api/v1/authentication`;
 
 const requestOTP = async (email) => {

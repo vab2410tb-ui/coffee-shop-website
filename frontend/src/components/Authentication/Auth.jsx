@@ -40,7 +40,6 @@ const Auth = () => {
       setLoading(false);
     }
   };
-  console.log('Dữ liệu chuẩn bị gửi đi:', { email, otp });
 
   const handleVerifyOTP = async (e) => {
     e.preventDefault();
