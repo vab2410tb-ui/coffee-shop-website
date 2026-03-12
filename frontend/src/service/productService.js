@@ -1,7 +1,9 @@
+import axios from 'axios';
 import axiosClient from './clientService.js';
 
 const ProductService = {
-  // 1. Lấy sản phẩm theo danh mục (Dành cho khách hàng)
+  // [ USER ]
+  // 1. Lấy sản phẩm theo danh mục
   // URL: http://localhost:8000/api/v1/products/category/:slug
   getProductsByCategory: async (slug, sortOrder) => {
     const url = `/products/category/${slug}`;
@@ -11,20 +13,26 @@ const ProductService = {
       },
     });
   },
-
+  // 2. Lấy sản phẩm theo mã sku
   getDetailProductsBySku: async (sku) => {
     const url = `/products/${sku}`;
     return axiosClient.get(url);
   },
 
-  // ADMIN
-  // 2. Lấy chi tiết 1 sản phẩm 
+  // 3. Tìm kiếm sản phẩm
+  searchProducts: async (keyword) => {
+    const url = `/products/search?keyword=${keyword}`;
+    return axiosClient.get(url);
+  },
+
+  // [ ADMIN ]
+  // 1. Lấy chi tiết 1 sản phẩm
   // http://localhost:8000/api/v1/admin/products/:id
   get: async (id) => {
     const url = `/admin/products/${id}`;
     return axiosClient.get(url);
   },
-
+  // 2. Lấy tất cả sản phẩm
   getAll: async (searchTerm, filterType, sortOrder) => {
     const url = '/admin/products';
     return axiosClient.get(url, {

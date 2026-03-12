@@ -17,49 +17,44 @@ import SearchNavBar from './SearchNavBar.jsx';
 
 const NavBar = () => {
   const [products, setProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(false);
+  const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
   const { userInfo, logout } = useContext(AuthContext);
   const { toggleCart, cart } = useContext(CartContext);
-  const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-
-  // const goToCartPage = () => {
-  //   toggleCart(false);
-  //   navigate('/cart');
-  // };
 
   const handleLogout = () => {
     logout();
   };
   useEffect(() => {
-  const timer = setTimeout(() => {
-    setDebouncedSearch(searchTerm);
-  }, 500);
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, 500);
 
-  return () => clearTimeout(timer);
-}, [searchTerm]);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
   useEffect(() => {
-  const fetchProducts = async () => {
-    if (!debouncedSearch.trim()) {
-      setProducts([]);
-      return;
-    }
+    const fetchProducts = async () => {
+      if (!debouncedSearch || debouncedSearch.trim() === '') {
+        setProducts([]);
+        return;
+      }
+      try {
+        const res = await ProductService.searchProducts(debouncedSearch);
+        setProducts(res.data?.data || res.data || []);
+      } catch (error) {
+        console.error('Fetch products failed:', error);
+        setProducts([]);
+      }
+    };
+    fetchProducts();
+  }, [debouncedSearch]);
 
-    try {
-      const res = await ProductService.getDetailProductsBySku(debouncedSearch);
-      setProducts(res.data?.data || res.data || []);
-    } catch (error) {
-      console.error("Fetch products failed:", error);
-      setProducts([]);
-    }
-  };
-
-  fetchProducts();
-}, [debouncedSearch]);
-  console.log(products);
   return (
-    <div>
+    <div style={{ position: 'relative'}}>
       <div className={header.header}>
         <div className={header.header__logo}>
           <Link to="/" className={header.header__link}>
@@ -206,20 +201,12 @@ const NavBar = () => {
                 </ul>
               </li>
 
-              {/* Find product */}
+              {/* Search product */}
               <li>
-                <FontAwesomeIcon icon={faMagnifyingGlass} className={header.icon} />
-                <input
-                  type="text"
-                  placeholder="Search by product name or SKU..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  style={{
-                    padding: '12px',
-                    width: '500px',
-                    border: '1px solid #ccc',
-                    borderRadius: '5px',
-                  }}
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  className={header.icon}
+                  onClick={() => setIsSearchOpen(!isSearchOpen)}
                 />
               </li>
               {/* Cart product */}
@@ -241,9 +228,51 @@ const NavBar = () => {
           </span>
         </Link>
       </div>
-      {debouncedSearch && products.length > 0 && (
-  <SearchNavBar products={products} />
-)}
+      {isSearchOpen && (
+        <div 
+          style={{
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            width: '100%',
+            height: '100vh', 
+            backgroundColor: 'rgba(0, 0, 0, 0.6)', 
+            zIndex: 9999,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center', 
+            paddingTop: '40px'
+          }}
+          onClick={() => setIsSearchOpen(false)} 
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()} 
+            style={{ width: '600px', maxWidth: '90%', position: 'relative' }}
+          >
+            <input
+              type="text"
+              placeholder="Search by product name or SKU..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '15px 20px',
+                fontSize: '18px',
+                borderRadius: '8px',
+                border: 'none',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+                outline: 'none'
+              }}
+            />
+
+            {debouncedSearch && products.length > 0 && (
+              <div style={{ marginTop: '10px', width: '100%' }}>
+                <SearchNavBar products={products} />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
