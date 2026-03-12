@@ -6,7 +6,7 @@ const router = express.Router();
 
 // . Route search sản phẩm
 // URL: /api/v1/products/search?keyword=linea
-router.get('/search', shopController.searchProducts);
+router.get('/search/:sku', shopController.searchProducts);
 
 // . Route lấy theo danh mục
 // URL: /api/v1/products/category/espresso-machine

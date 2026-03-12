@@ -101,14 +101,14 @@ const shopController = {
     // 5. [ LẤY SẢN PHẨM KHI SEARCH ]
     searchProducts: async (req, res ) => {
         try{
-            const {keyword} = req.params;
-            if (!keyword) {
+            const {sku} = req.params;
+            if (!sku) {
                 return res.status(200).json({ success: true, data: [] });
             }
             const products = await Products.find({
                 $or: [
-                    { name: { $regex: keyword, $options: 'i' } },
-                    { sku: { $regex: keyword, $options: 'i' } }
+                    { name: { $regex: sku, $options: 'i' } },
+                    { sku: { $regex: sku, $options: 'i' } }
                 ]
             });
             return res.status(200).json({

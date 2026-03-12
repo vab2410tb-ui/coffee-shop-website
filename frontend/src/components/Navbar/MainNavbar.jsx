@@ -18,7 +18,7 @@ import SearchNavBar from './SearchNavBar.jsx';
 const NavBar = () => {
   const [products, setProducts] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
   const { userInfo, logout } = useContext(AuthContext);
   const { toggleCart, cart } = useContext(CartContext);
@@ -52,7 +52,7 @@ const NavBar = () => {
     };
     fetchProducts();
   }, [debouncedSearch]);
-
+  console.log(products)
   return (
     <div style={{ position: 'relative'}}>
       <div className={header.header}>
@@ -169,8 +169,8 @@ const NavBar = () => {
                 </ul>
               </li>
 
-              <li>
-                <FontAwesomeIcon icon={faMagnifyingGlass} className={header.icon} />
+              <li >
+                <FontAwesomeIcon icon={faMagnifyingGlass} className={header.icon} onClick={() => setIsSearchOpen(!isSearchOpen)}/>
               </li>
 
               <li>
