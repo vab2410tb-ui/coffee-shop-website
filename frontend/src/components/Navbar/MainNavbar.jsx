@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faMagnifyingGlass,
@@ -9,18 +9,19 @@ import {
   faCircleUser,
   faBoxOpen,
 } from '@fortawesome/free-solid-svg-icons';
-import { CartContext } from '../../features/ContextProvider';
+import { CartContext } from '../../features/ContextProvider.jsx';
 import { AuthContext } from '../../features/AuthContext.jsx';
-// import { useNavigate } from 'react-router-dom';
-// import ProductService from '../../service/productService';
+import ProductService from '../../service/productService.js';
 import header from './navbar.module.scss';
+import SearchNavBar from './SearchNavBar.jsx';
 
 const NavBar = () => {
-  // const [searchTerm, setSearchTerm] = useState("");
-  // const [products, setProducts] = useState('');
+  const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const { userInfo, logout } = useContext(AuthContext);
   const { toggleCart, cart } = useContext(CartContext);
-  // const navigate = useNavigate();
+  const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
+
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   // const goToCartPage = () => {
@@ -31,20 +32,32 @@ const NavBar = () => {
   const handleLogout = () => {
     logout();
   };
+  useEffect(() => {
+  const timer = setTimeout(() => {
+    setDebouncedSearch(searchTerm);
+  }, 500);
 
-  //     useEffect(() => {
-  //     const fetchProducts = async () => {
-  //         try {
-  //             const data = await ProductService.getAll(searchTerm);
-  //             setProducts(data);
-  //         } catch (err) {
-  //             console.error("Fetch products failed:", err);
-  //         }
-  //     };
+  return () => clearTimeout(timer);
+}, [searchTerm]);
+  useEffect(() => {
+  const fetchProducts = async () => {
+    if (!debouncedSearch.trim()) {
+      setProducts([]);
+      return;
+    }
 
-  //     fetchProducts();
-  // }, [searchTerm]);
+    try {
+      const res = await ProductService.getDetailProductsBySku(debouncedSearch);
+      setProducts(res.data?.data || res.data || []);
+    } catch (error) {
+      console.error("Fetch products failed:", error);
+      setProducts([]);
+    }
+  };
 
+  fetchProducts();
+}, [debouncedSearch]);
+  console.log(products);
   return (
     <div>
       <div className={header.header}>
@@ -140,7 +153,9 @@ const NavBar = () => {
                       <p style={{ color: '#000', fontWeight: '300' }}>Profile</p>
                     </Link>
 
-                    <p style={{ color: '#000', fontWeight: '300' }}>Orders</p>
+                    <Link to={`/orders/${userInfo._id}`}>
+                      <p style={{ color: '#000', fontWeight: '300' }}>Orders</p>
+                    </Link>
 
                     <p
                       onClick={handleLogout}
@@ -194,8 +209,19 @@ const NavBar = () => {
               {/* Find product */}
               <li>
                 <FontAwesomeIcon icon={faMagnifyingGlass} className={header.icon} />
+                <input
+                  type="text"
+                  placeholder="Search by product name or SKU..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{
+                    padding: '12px',
+                    width: '500px',
+                    border: '1px solid #ccc',
+                    borderRadius: '5px',
+                  }}
+                />
               </li>
-
               {/* Cart product */}
               <li>
                 <div className={header.iconWrapper} onClick={() => toggleCart(true)}>
@@ -215,6 +241,9 @@ const NavBar = () => {
           </span>
         </Link>
       </div>
+      {debouncedSearch && products.length > 0 && (
+  <SearchNavBar products={products} />
+)}
     </div>
   );
 };

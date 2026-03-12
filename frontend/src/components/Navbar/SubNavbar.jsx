@@ -30,7 +30,6 @@ const SubNavbar = () => {
           return;
         }
         const dataUser = await userService.getProfile();
-        // API trả về dataUser có chứa _id thì hàm setFormData sẽ cập nhật luôn _id
         setFormData(dataUser);
       } catch (err) {
         console.log('Your session has expired. Please log in again!');
@@ -49,25 +48,25 @@ const SubNavbar = () => {
             <img src="/icon/image.png" alt="NabCoffeeShop" width={80} />
           </Link>
 
-          {/* Cập nhật Link Orders có kèm _id */}
           <NavLink
             to={formData._id ? `/orders/${formData._id}` : '/orders'}
             style={({ isActive }) => ({
               textDecoration: isActive ? 'underline' : 'none',
               textUnderlineOffset: isActive ? '4px' : 'auto',
               fontWeight: isActive ? 'bold' : 'normal',
+              color: '#333'
             })}
           >
             Orders
           </NavLink>
 
-          {/* Đổi user._id thành formData._id */}
           <NavLink
             to={formData._id ? `/profile/${formData._id}` : '/profile'}
             style={({ isActive }) => ({
               textDecoration: isActive ? 'underline' : 'none',
               textUnderlineOffset: isActive ? '4px' : 'auto',
               fontWeight: isActive ? 'bold' : 'normal',
+              color: '#333'
             })}
           >
             Profile

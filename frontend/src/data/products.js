@@ -10,7 +10,8 @@ export const SlideData = [
     src: 'https://res.cloudinary.com/drrao1nzd/image/upload/v1770301124/nab_coffee/products/main/b6mvx9kdrfjrpxebated.jpg',
     title: 'COFFEE - MINIMALIST',
     title2: 'for those who savor simplicity.',
-    btn: 'MENU NOW',
+    btn: 'SHOP NOW',
+    link: '/shop/coffee-beans'
   },
   {
     src: 'https://res.cloudinary.com/drrao1nzd/image/upload/v1770301135/nab_coffee/products/main/am7jaysjijsh0we4klk3.jpg',

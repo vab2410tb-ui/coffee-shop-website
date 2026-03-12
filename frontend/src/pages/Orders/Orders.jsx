@@ -7,16 +7,20 @@ import orderService from '../../service/orderService';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import dayjs from 'dayjs';
 import SubNavbar from '../../components/Navbar/SubNavbar';
-
+import OrderDetail from '../../components/OrderTracking/OrderDetail.user.jsx';
+import SubFooter from '../../components/Footer/SubFooter.jsx';
 
 const OrderPage = () => {
   const [products, setProducts] = useState([]);
+  const [selectProduct, setSelectProduct] = useState(null);
   const { userId } = useParams();
   const navigate = useNavigate();
   dayjs.extend(advancedFormat);
 
-  const extraItems = products.map((item) => item.orderItems.length - 1).filter((n) => n > 0);
-
+  const handleClick = (item) => {
+    setSelectProduct(item);
+  }
+  
   useEffect(() => {
     const fetchOrderUser = async () => {
       try {
@@ -43,7 +47,11 @@ const OrderPage = () => {
   }, [userId, navigate]);
 
   return (
-    <div>
+    <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
       <SubNavbar />
       <div className={order.container}>
         <h1>Orders</h1>
@@ -55,12 +63,7 @@ const OrderPage = () => {
               const extraItems = item.orderItems.length - 1;
 
               return (
-                <Link
-                  key={item._id}
-                  to={`/order-tracking/${item.orderId}`}
-                  className={order.cardItem}
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                >
+                <button className={order.cardItem} onClick={() => handleClick(item)} key={item.orderId}>
                   <div className={order.cardText}>
                     <p style={{ fontWeight: 'bold' }}>
                       <FontAwesomeIcon icon={faClock} /> {item.status}
@@ -82,7 +85,6 @@ const OrderPage = () => {
                             style={{ borderRadius: '10px' }}
                           />
                         </div>
-
                         <p style={{ fontWeight: 'bold' }}>{totalItems} items</p>
                       </div>
                     ) : (
@@ -96,14 +98,13 @@ const OrderPage = () => {
                         </div>
                       ))
                     )}
-
                     <p style={{ fontSize: '13px', color: '#333333b3' }}>{item.orderId}</p>
                   </div>
-
                   <p style={{ fontWeight: 'bold' }}>
                     {new Intl.NumberFormat('vi-VN').format(totalPrice)} VND
                   </p>
-                </Link>
+                  <span className={order.btnView}>View order</span>
+                </button>
               );
             })
           ) : (
@@ -111,6 +112,12 @@ const OrderPage = () => {
           )}
         </div>
       </div>
+      {selectProduct && <OrderDetail order={order} 
+          orderData={selectProduct} 
+          onClose={() => setSelectProduct(null)} 
+      />}
+
+      <SubFooter />
     </div>
   );
 };
