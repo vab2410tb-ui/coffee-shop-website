@@ -1,5 +1,4 @@
-// src/pages/admin/ProductManagement.jsx
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import ProductService from '../../service/productService.js';
@@ -13,6 +12,15 @@ function ProductManagement() {
   const [sortOrder, setSortOrder] = useState('default');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
+  const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setDebouncedSearch(searchTerm);
+  }, 500);
+
+  return () => clearTimeout(timer);
+}, [searchTerm]);
 
   const filters = [
     { id: 'all', label: 'ALL' },
@@ -23,16 +31,18 @@ function ProductManagement() {
   ];
 
   // lấy danh sách sản phẩm từ server
-  const fetchProducts = useCallback(async () => {
+  useEffect(() => {
+  const fetchProducts = async () => {
     try {
-      const data = await ProductService.getAll(searchTerm, filterType, sortOrder);
-      const productArray = Array.isArray(data) ? data : data?.data || [];
-
-      setProducts(productArray);
-    } catch (err) {
-      console.error('Fetch products failed:', err);
+      const res = await ProductService.getAll(searchTerm, filterType, sortOrder, debouncedSearch);
+      setProducts(res?.data ?? res ?? []);
+    } catch (error) {
+      console.error("Fetch products failed:", error);
     }
-  }, [searchTerm, filterType, sortOrder]);
+  };
+
+  fetchProducts();
+}, [searchTerm, filterType, sortOrder, debouncedSearch]);
 
   useEffect(() => {
     if (editingId) {
@@ -40,9 +50,7 @@ function ProductManagement() {
     }
   }, [editingId]);
 
-  useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+ 
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
@@ -163,7 +171,6 @@ function ProductManagement() {
           <tbody>
             {!Array.isArray(products) || products.length === 0 ? (
               <tr>
-                {/* Lưu ý: Bảng của bạn có 7 thẻ <th> ở thead, nên colSpan phải là 7 thay vì 5 để không bị lệch giao diện */}
                 <td colSpan="7" style={{ padding: '20px', textAlign: 'center' }}>
                   No products found.
                 </td>
@@ -226,9 +233,9 @@ function ProductManagement() {
                             justifyContent: 'center',
                           }}
                         >
-                          {p?.variants?.map((variant, Index) => (
+                          {p?.variants?.map((variant, index) => (
                             <div
-                              key={Index}
+                              key={index}
                               style={{
                                 display: 'flex',
                                 minWidth: '100px',

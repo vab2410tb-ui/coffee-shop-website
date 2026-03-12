@@ -46,7 +46,12 @@ const shopController = {
     getProductsBySku : async (req, res) => {
         const { sku } = req.params;
         try {
-            const products = await Products.findOne({sku})
+            const products = await Products.find({
+            $or: [
+                { name: { $regex: sku, $options: 'i' } },
+                { sku: { $regex: sku, $options: 'i' } }
+            ]
+        });
             return res.status(200).json({
                 success: true,
                 data: products
