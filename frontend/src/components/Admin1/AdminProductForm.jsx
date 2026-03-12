@@ -157,34 +157,32 @@ function AdminProductForm({ productId, onSuccess, onCancel }) {
   };
 
   // Upload ảnh riêng cho từng phân loại màu
-  const handleVariantImageUpload = async (index, e) => {
+ const handleVariantImageUpload = async (index, e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = async () => {
-      setLoading(true);
-      try {
-        const response = await UploadService.uploadImage(reader.result, 'variant');
-        const imageUrl = response.url || response.data?.url;
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      // Bạn có thể thêm type nếu backend cần: formData.append('type', 'variant');
 
-        // Cập nhật lại mảng variants
-        const updatedVariants = [...variants];
-        if (!updatedVariants[index].images) {
-          updatedVariants[index].images = [];
-        }
-        updatedVariants[index].images.push(imageUrl);
-        setVariants(updatedVariants);
+      const response = await UploadService.uploadImage(formData, 'variant');
+      const imageUrl = response.url || response.data?.url;
 
-        // Reset input file
-        e.target.value = '';
-      } catch (err) {
-        alert('Upload fail!');
-      } finally {
-        setLoading(false);
+      const updatedVariants = [...variants];
+      if (!updatedVariants[index].images) {
+        updatedVariants[index].images = [];
       }
-    };
+      updatedVariants[index].images.push(imageUrl);
+      setVariants(updatedVariants);
+
+      e.target.value = '';
+    } catch (err) {
+      alert('Upload fail!');
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Xóa ảnh của một màu cụ thể

@@ -1,21 +1,38 @@
+// src/app/controllers/admin/upload.controller.js
 import { v2 as cloudinary } from 'cloudinary';
 
 const uploadImgController = {
-
     Upload: async (req, res) => {
         try {
-            const { image, type } = req.body;
+            // 1. Kiểm tra multer đã bắt được file 
+            if (!req.file) {
+                return res.status(400).json({ message: "No file uploaded" });
+            }
 
-            // Xác định folder dựa trên loại ảnh
+            const { type } = req.body;
             const targetFolder = type === 'detail'
                 ? 'nab_coffee/products/details'
                 : 'nab_coffee/products/main';
 
-            const result = await cloudinary.uploader.upload(image, {
-                upload_preset: 'nab_coffee_upload',
-                folder: targetFolder,
-                allowed_formats: ['png', 'jpeg', 'jpg', 'svg', 'webp'],
-            });
+            // 2. Upload file từ Buffer (vì dùng MemoryStorage)
+            const uploadFromBuffer = (fileBuffer) => {
+                return new Promise((resolve, reject) => {
+                    const stream = cloudinary.uploader.upload_stream(
+                        {
+                            folder: targetFolder,
+                            upload_preset: 'nab_coffee_upload',
+                            allowed_formats: ['png', 'jpeg', 'jpg', 'svg', 'webp'],
+                        },
+                        (error, result) => {
+                            if (result) resolve(result);
+                            else reject(error);
+                        }
+                    );
+                    stream.end(fileBuffer);
+                });
+            };
+
+            const result = await uploadFromBuffer(req.file.buffer);
 
             return res.status(200).json({
                 message: "Upload thành công!",
@@ -31,7 +48,6 @@ const uploadImgController = {
             });
         }
     }
-
 };
 
 export default uploadImgController;

@@ -4,18 +4,17 @@ const API_URL = `${process.env.REACT_APP_API_BASE_URL}/api/v1/admin/uploads`;
 
 const axiosUpload = axios.create({
   baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  // XÓA headers Content-Type ở đây
 });
 
 const UploadService = {
-  // Upload ảnh lên Cloudinary qua Backend
-  uploadImage: async (base64Image, type) => {
-    const response = await axiosUpload.post('/upload', {
-      image: base64Image,
-      type: type,
-    });
+  // Nhận formData từ AdminProductForm
+  uploadImage: async (formData, type) => {
+    // Nếu chưa append type ở ngoài thì append ở đây
+    if (type && !formData.has('type')) {
+        formData.append('type', type);
+    }
+    const response = await axiosUpload.post('/upload', formData);
     return response.data;
   },
 };
