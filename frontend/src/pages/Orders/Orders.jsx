@@ -112,10 +112,8 @@ const OrderPage = () => {
           )}
         </div>
       </div>
-      {selectProduct && <OrderDetail order={order} 
-          orderData={selectProduct} 
-          onClose={() => setSelectProduct(null)} 
-      />}
+      
+      {selectProduct && <OrderDetail order={order} orderData={selectProduct} onClose={() => setSelectProduct(null)} />}
 
       <SubFooter />
     </div>

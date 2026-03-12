@@ -96,6 +96,31 @@ const shopController = {
                 message: error.message 
             });
         }
+    },
+
+    // 5. [ LẤY SẢN PHẨM KHI SEARCH ]
+    searchProducts: async (req, res ) => {
+        try{
+            const {keyword} = req.params;
+            if (!keyword) {
+                return res.status(200).json({ success: true, data: [] });
+            }
+            const products = await Products.find({
+                $or: [
+                    { name: { $regex: keyword, $options: 'i' } },
+                    { sku: { $regex: keyword, $options: 'i' } }
+                ]
+            });
+            return res.status(200).json({
+                    success: true,
+                    data: products
+                });
+        } catch (error) {
+            return res.status(500).json({ 
+                success: false, 
+                message: error.message 
+            });
+        }
     }
 };
 

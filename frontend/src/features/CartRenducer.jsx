@@ -1,6 +1,4 @@
 const CartReducer = (state, action) => {
-  console.log('🔥 Hành động đang gọi:', action.type);
-  console.log('📦 Dữ liệu truyền lên (payload):', action);
   // Destructuring action
   const { type, product, variant, id, colorCode } = action;
 
@@ -8,7 +6,7 @@ const CartReducer = (state, action) => {
     case 'Add':
       // Tìm xem sản phẩm cùng màu này đã có trong giỏ chưa
       const existingItem = state.find(
-        (item) => item._id === product._id && item.colorCode === variant.colorCode,
+        (item) => item._id === product?._id && item.colorCode === variant?.colorCode,
       );
       const quantityToAdd = action.quantity || 1;
       if (existingItem) {
@@ -27,13 +25,13 @@ const CartReducer = (state, action) => {
       return [
         ...state,
         {
-          _id: product._id,
-          name: product.name,
-          price: product.price,
-          image: variant.images[0] || product.mainImage,
-          color: variant.color,
-          colorCode: variant.colorCode,
-          stock: variant.stock,
+          _id: product?._id,
+          name: product?.name,
+          price: product?.price,
+          image: variant?.images?.[0] || product?.mainImage,
+          color: variant?.color,
+          colorCode: variant?.colorCode,
+          stock: variant?.stock || product?.stock,
           quantity: quantityToAdd,
         },
       ];
