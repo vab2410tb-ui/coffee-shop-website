@@ -1,21 +1,21 @@
 import axios from 'axios';
 
-const API_URL = `${process.env.REACT_APP_API_BASE_URL}/api/v1/authentication/profile`;
+const API_URL = `${process.env.REACT_APP_API_BASE_URL}/api/v1/admin/uploads`;
 
 const axiosUpload = axios.create({
   baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
 const UploadService = {
-  // Upload ảnh lên Cloudinary qua Backend
-  uploadImage: async (base64Image, type) => {
-    const response = await axiosUpload.post('/upload', {
-      image: base64Image,
-      type: type,
-    });
+  uploadImage: async (formData, type) => {
+    // 1. Nhét thêm type vào chung cục formData
+    if (type) {
+      formData.append('type', type);
+    }
+    
+    // 2. CHÚ Ý: Truyền thẳng biến formData vào, TUYỆT ĐỐI KHÔNG dùng { formData } hay { image: formData }
+    const response = await axiosUpload.post('/upload', formData);
+    
     return response.data;
   },
 };

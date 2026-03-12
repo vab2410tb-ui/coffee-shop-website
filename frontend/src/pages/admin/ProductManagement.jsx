@@ -30,8 +30,6 @@ useEffect(() => {
     { id: 'accessories', label: 'ACCESSORIES' },
   ];
 
-  // lấy danh sách sản phẩm từ server
-  useEffect(() => {
   const fetchProducts = async () => {
     try {
       const res = await ProductService.getAll(searchTerm, filterType, sortOrder, debouncedSearch);
@@ -41,6 +39,9 @@ useEffect(() => {
     }
   };
 
+
+  // lấy danh sách sản phẩm từ server
+  useEffect(() => {
   fetchProducts();
 }, [searchTerm, filterType, sortOrder, debouncedSearch]);
 

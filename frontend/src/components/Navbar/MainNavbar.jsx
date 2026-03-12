@@ -25,9 +25,22 @@ const NavBar = () => {
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
+  useEffect(() => {
+    if(isSearchOpen) {
+      document.body.style.overflow = 'hiden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+
+  }, [isSearchOpen])
+
   const handleLogout = () => {
     logout();
   };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchTerm);
@@ -52,7 +65,6 @@ const NavBar = () => {
     };
     fetchProducts();
   }, [debouncedSearch]);
-  console.log(products)
   return (
     <div style={{ position: 'relative'}}>
       <div className={header.header}>
