@@ -21,7 +21,7 @@ const ProductService = {
 
   // 3. Tìm kiếm sản phẩm
   searchProducts: async (sku) => {
-    const url = `/products/search?keyword=${sku}`;
+    const url = `/products/search/${sku}`;
     return axiosClient.get(url);
   },
 

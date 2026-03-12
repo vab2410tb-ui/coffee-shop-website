@@ -5,7 +5,7 @@ import shopController from '../app/controllers/shop.controller.js';
 const router = express.Router();
 
 // . Route search sản phẩm
-// URL: /api/v1/products/search?keyword=linea
+// URL: /api/v1/products/search
 router.get('/search/:sku', shopController.searchProducts);
 
 // . Route lấy theo danh mục
