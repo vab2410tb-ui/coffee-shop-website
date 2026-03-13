@@ -1,11 +1,26 @@
 import React, { createContext, useReducer, useState } from 'react';
 import CartReducer from './CartRenducer.jsx';
+
 export const CartContext = createContext();
 
+const initCart = () => {
+  try {
+    const localData = localStorage.getItem('cart');
+    return localData ? JSON.parse(localData) : [];
+  } catch (error) {
+    console.error("LocalStorage:", error);
+    return [];
+  }
+};
+
 const ContextPorvider = ({ children }) => {
-  const [cart, dispatch] = useReducer(CartReducer, []);
+  const [cart, dispatch] = useReducer(CartReducer, initCart());
   const [isCartOpen, setIsCartOpen] = useState(false);
   const toggleCart = (open) => setIsCartOpen(open);
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   return (
     <CartContext.Provider value={{ cart, dispatch, isCartOpen, toggleCart }}>
